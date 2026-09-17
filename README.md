@@ -136,6 +136,47 @@ is reported as ROC-AUC and balanced accuracy rather than accuracy.
 to anything, which is roughly the physicians' own agreement rate. Any paper reporting
 bare accuracy on an imbalanced cough-type set is reporting the class prior.
 
+### Stage 2 at an operating point
+
+An AUC of 0.705 says nothing about what happens when the model has to make a call.
+`results/stage2_operating_points.json` reads the same fifteen runs three more ways
+(script in the private repository, `src/operating_point.py`).
+
+**The CNN beats the linear baseline on every one of the 15 fold × seed pairs.** Paired
+difference in ROC-AUC on the same fold and seed: **+0.146 ± 0.036** (mean ± sd,
+95 % CI ±0.018), worst run +0.077, best +0.217. Per fold the CNN sits between 0.683
+(fold 2) and 0.734 (fold 4), the baseline between 0.550 and 0.575. So the gap is
+not a lucky split — it is small, but it is everywhere.
+
+**Most of the run-to-run spread is the fold, not the seed.** Pooling each seed's
+out-of-fold probabilities over all 2,063 recordings gives AUC 0.706, 0.700, 0.698 —
+**0.701 ± 0.004** across seeds, against ± 0.027 across the fifteen runs. Retraining
+changes the number less than which 413 recordings you happen to score.
+
+**At the class-weighted argmax threshold the model over-calls "wet".** Pooled over
+the 15 runs it flags **50 %** of recordings as wet when 23 % are: wet recall 0.74,
+dry recall 0.57, precision on "wet" 0.34. Two of every three "wet" calls are wrong.
+
+| Dry coughs kept correct (specificity) | Wet coughs caught (sensitivity), mean ± sd over 3 seeds |
+|---|---|
+| 90 % | **0.26** ± 0.03 |
+| 80 % | **0.46** ± 0.00 |
+| 70 % | **0.59** ± 0.00 |
+
+Read the table before imagining a product. If the false-alarm rate on dry coughs
+has to stay at 10 %, the model finds one wet cough in four. It only becomes useful as
+a *screen* — high recall, low precision — which is the opposite of what a cough-typing
+claim usually implies.
+
+### Checking the numbers
+
+The run-level results are in `results/` (`cv_runs.json` for stage 1 with per-clip
+logits, `coughtype_runs.json` for stage 2 with per-recording probabilities).
+`tests/test_readme_numbers.py` recomputes every figure quoted on this page from those
+files — the ± values, the 75 % cough recall, the 15 % laughing confusion, the
+2,063 / 1,587 / 476 split, the operating points above — so a regenerated results
+file that no longer matches the text fails the test. `python -m pytest tests/`.
+
 ---
 
 ## Honest limitations
