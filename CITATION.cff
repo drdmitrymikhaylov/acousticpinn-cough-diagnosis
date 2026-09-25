@@ -1,11 +1,20 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
 type: software
-title: "acousticpinn-cough-diagnosis"
+title: "AcousticPINN: Cough Detection and Dry/Wet Typing"
+abstract: "Cough detection and dry/wet typing on open clinical data"
 authors:
   - family-names: Mikhaylov
     given-names: Dmitry
     orcid: "https://orcid.org/0009-0009-2108-6820"
+    affiliation: "Abu Dhabi Maritime Academy, AD Ports Group"
 repository-code: "https://github.com/drdmitrymikhaylov/acousticpinn-cough-diagnosis"
+url: "https://github.com/drdmitrymikhaylov/acousticpinn-cough-diagnosis"
 license: "CC-BY-4.0"
-year: 2026
+keywords:
+  - "acoustic monitoring"
+  - "audio classification"
+  - "cough detection"
+  - "digital health"
+  - "spectrogram"
+date-released: "2026-09-07"
