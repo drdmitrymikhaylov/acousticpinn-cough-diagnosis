@@ -20,6 +20,10 @@ The numbers are therefore smaller than the literature's -- and you can check the
 
 ---
 
+## The road here
+
+Cough acoustics is one of my longest-running lines of work. During the pandemic my team built a system that told COVID-19 from other respiratory conditions by the sound of a cough, published in *IEEE Open Journal of Engineering in Medicine and Biology* (2021, *Acoustery System for Differential Diagnosing of Coronavirus COVID-19 Disease*) and covered by the press in Asia. The same pipeline went on to clinical and commercial partners. This repository is its open core, retrained on public cough datasets so anyone can reproduce every number.
+
 ## Where does this come from?
 
 Two peer-reviewed studies I co-authored on cough acoustics, both on **proprietary
