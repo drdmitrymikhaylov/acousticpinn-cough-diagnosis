@@ -1,0 +1,641 @@
+{
+ "n_clips": 400,
+ "n_seeds": 3,
+ "unit_note": "three seeds score the same 400 clips; clip-level counts use n = 40 per class",
+ "sources": {
+  "total": 326,
+  "per_class": {
+   "coughing": {
+    "clips": 40,
+    "sources": 39,
+    "largest_source_clips": 2
+   },
+   "sneezing": {
+    "clips": 40,
+    "sources": 40,
+    "largest_source_clips": 1
+   },
+   "breathing": {
+    "clips": 40,
+    "sources": 33,
+    "largest_source_clips": 3
+   },
+   "laughing": {
+    "clips": 40,
+    "sources": 36,
+    "largest_source_clips": 2
+   },
+   "snoring": {
+    "clips": 40,
+    "sources": 33,
+    "largest_source_clips": 2
+   },
+   "crying_baby": {
+    "clips": 40,
+    "sources": 18,
+    "largest_source_clips": 7
+   },
+   "clapping": {
+    "clips": 40,
+    "sources": 33,
+    "largest_source_clips": 4
+   },
+   "footsteps": {
+    "clips": 40,
+    "sources": 32,
+    "largest_source_clips": 6
+   },
+   "brushing_teeth": {
+    "clips": 40,
+    "sources": 29,
+    "largest_source_clips": 4
+   },
+   "drinking_sipping": {
+    "clips": 40,
+    "sources": 33,
+    "largest_source_clips": 4
+   }
+  }
+ },
+ "per_class": {
+  "coughing": {
+   "pooled_right_of_120": 90,
+   "pooled_recall": 0.75,
+   "per_seed_right_of_40": [
+    30,
+    30,
+    30
+   ],
+   "majority_right_of_40": 32,
+   "majority_recall_wilson95": [
+    0.652426936536005,
+    0.895000102745623
+   ],
+   "never_right": 7,
+   "always_right": 25,
+   "rank_from_hardest": 3
+  },
+  "sneezing": {
+   "pooled_right_of_120": 110,
+   "pooled_recall": 0.9166666666666666,
+   "per_seed_right_of_40": [
+    38,
+    35,
+    37
+   ],
+   "majority_right_of_40": 37,
+   "majority_recall_wilson95": [
+    0.8013576647568946,
+    0.9741639742254119
+   ],
+   "never_right": 2,
+   "always_right": 35,
+   "rank_from_hardest": 8
+  },
+  "breathing": {
+   "pooled_right_of_120": 88,
+   "pooled_recall": 0.7333333333333334,
+   "per_seed_right_of_40": [
+    31,
+    30,
+    27
+   ],
+   "majority_right_of_40": 29,
+   "majority_recall_wilson95": [
+    0.5716504419378943,
+    0.8389198375233267
+   ],
+   "never_right": 8,
+   "always_right": 27,
+   "rank_from_hardest": 2
+  },
+  "laughing": {
+   "pooled_right_of_120": 93,
+   "pooled_recall": 0.775,
+   "per_seed_right_of_40": [
+    33,
+    31,
+    29
+   ],
+   "majority_right_of_40": 31,
+   "majority_recall_wilson95": [
+    0.6249690325768998,
+    0.8768390867645927
+   ],
+   "never_right": 5,
+   "always_right": 27,
+   "rank_from_hardest": 4
+  },
+  "snoring": {
+   "pooled_right_of_120": 116,
+   "pooled_recall": 0.9666666666666667,
+   "per_seed_right_of_40": [
+    39,
+    39,
+    38
+   ],
+   "majority_right_of_40": 39,
+   "majority_recall_wilson95": [
+    0.8711863103652591,
+    0.9955731684973186
+   ],
+   "never_right": 1,
+   "always_right": 38,
+   "rank_from_hardest": 10
+  },
+  "crying_baby": {
+   "pooled_right_of_120": 114,
+   "pooled_recall": 0.9499999999999998,
+   "per_seed_right_of_40": [
+    38,
+    38,
+    38
+   ],
+   "majority_right_of_40": 38,
+   "majority_recall_wilson95": [
+    0.8349612263085903,
+    0.9861793326138516
+   ],
+   "never_right": 2,
+   "always_right": 38,
+   "rank_from_hardest": 9
+  },
+  "clapping": {
+   "pooled_right_of_120": 107,
+   "pooled_recall": 0.8916666666666666,
+   "per_seed_right_of_40": [
+    36,
+    33,
+    38
+   ],
+   "majority_right_of_40": 36,
+   "majority_recall_wilson95": [
+    0.7694822477247771,
+    0.9604204713173936
+   ],
+   "never_right": 1,
+   "always_right": 32,
+   "rank_from_hardest": 6
+  },
+  "footsteps": {
+   "pooled_right_of_120": 102,
+   "pooled_recall": 0.85,
+   "per_seed_right_of_40": [
+    34,
+    34,
+    34
+   ],
+   "majority_right_of_40": 34,
+   "majority_recall_wilson95": [
+    0.709276756335103,
+    0.9293881228267964
+   ],
+   "never_right": 5,
+   "always_right": 33,
+   "rank_from_hardest": 5
+  },
+  "brushing_teeth": {
+   "pooled_right_of_120": 109,
+   "pooled_recall": 0.9083333333333333,
+   "per_seed_right_of_40": [
+    37,
+    37,
+    35
+   ],
+   "majority_right_of_40": 37,
+   "majority_recall_wilson95": [
+    0.8013576647568946,
+    0.9741639742254119
+   ],
+   "never_right": 3,
+   "always_right": 35,
+   "rank_from_hardest": 7
+  },
+  "drinking_sipping": {
+   "pooled_right_of_120": 76,
+   "pooled_recall": 0.6333333333333333,
+   "per_seed_right_of_40": [
+    27,
+    24,
+    25
+   ],
+   "majority_right_of_40": 26,
+   "majority_recall_wilson95": [
+    0.49505880837257693,
+    0.7786547112682372
+   ],
+   "never_right": 9,
+   "always_right": 19,
+   "rank_from_hardest": 1
+  }
+ },
+ "cough": {
+  "calls_of_120": {
+   "coughing": 90,
+   "sneezing": 8,
+   "laughing": 18,
+   "footsteps": 1,
+   "drinking_sipping": 1,
+   "breathing": 2
+  },
+  "errors_of_120": 30,
+  "distinct_clips_with_an_error": 15,
+  "clips_by_seeds_right": {
+   "3": 25,
+   "2": 7,
+   "1": 1,
+   "0": 7
+  },
+  "errors_from_never_right_clips": 21,
+  "share_of_errors_from_never_right_clips": 0.7,
+  "per_seed_recall_wilson95": [
+   0.5980603857923197,
+   0.858128813609037
+  ],
+  "always_called": {
+   "sneezing": 2,
+   "laughing": 5
+  },
+  "majority_called": {
+   "sneezing": 2,
+   "laughing": 6
+  },
+  "laughing_vs_sneezing_always": {
+   "laughing": 5,
+   "sneezing": 2,
+   "p_two_sided": 0.453125
+  },
+  "laughing_vs_sneezing_majority": {
+   "laughing": 6,
+   "sneezing": 2,
+   "p_two_sided": 0.2890625
+  },
+  "always_laughing_freesound_ids": [
+   63679,
+   87794,
+   87795,
+   87799,
+   157296
+  ],
+  "always_laughing_id_groups_within_5": 3,
+  "clips_with_an_error": [
+   {
+    "filename": "1-52323-A-24.wav",
+    "fold": 1,
+    "freesound_id": 52323,
+    "calls_seed_0_1_2": [
+     "coughing",
+     "breathing",
+     "coughing"
+    ],
+    "seeds_right": 2
+   },
+   {
+    "filename": "1-53663-A-24.wav",
+    "fold": 1,
+    "freesound_id": 53663,
+    "calls_seed_0_1_2": [
+     "coughing",
+     "coughing",
+     "sneezing"
+    ],
+    "seeds_right": 2
+   },
+   {
+    "filename": "1-58792-A-24.wav",
+    "fold": 1,
+    "freesound_id": 58792,
+    "calls_seed_0_1_2": [
+     "sneezing",
+     "sneezing",
+     "sneezing"
+    ],
+    "seeds_right": 0
+   },
+   {
+    "filename": "1-63679-A-24.wav",
+    "fold": 1,
+    "freesound_id": 63679,
+    "calls_seed_0_1_2": [
+     "laughing",
+     "laughing",
+     "laughing"
+    ],
+    "seeds_right": 0
+   },
+   {
+    "filename": "2-108017-A-24.wav",
+    "fold": 2,
+    "freesound_id": 108017,
+    "calls_seed_0_1_2": [
+     "footsteps",
+     "coughing",
+     "coughing"
+    ],
+    "seeds_right": 2
+   },
+   {
+    "filename": "2-85292-A-24.wav",
+    "fold": 2,
+    "freesound_id": 85292,
+    "calls_seed_0_1_2": [
+     "drinking_sipping",
+     "coughing",
+     "coughing"
+    ],
+    "seeds_right": 2
+   },
+   {
+    "filename": "2-87794-A-24.wav",
+    "fold": 2,
+    "freesound_id": 87794,
+    "calls_seed_0_1_2": [
+     "laughing",
+     "laughing",
+     "laughing"
+    ],
+    "seeds_right": 0
+   },
+   {
+    "filename": "2-87795-A-24.wav",
+    "fold": 2,
+    "freesound_id": 87795,
+    "calls_seed_0_1_2": [
+     "laughing",
+     "laughing",
+     "laughing"
+    ],
+    "seeds_right": 0
+   },
+   {
+    "filename": "2-87799-A-24.wav",
+    "fold": 2,
+    "freesound_id": 87799,
+    "calls_seed_0_1_2": [
+     "laughing",
+     "laughing",
+     "laughing"
+    ],
+    "seeds_right": 0
+   },
+   {
+    "filename": "3-125418-A-24.wav",
+    "fold": 3,
+    "freesound_id": 125418,
+    "calls_seed_0_1_2": [
+     "coughing",
+     "laughing",
+     "laughing"
+    ],
+    "seeds_right": 1
+   },
+   {
+    "filename": "3-145487-A-24.wav",
+    "fold": 3,
+    "freesound_id": 145487,
+    "calls_seed_0_1_2": [
+     "coughing",
+     "breathing",
+     "coughing"
+    ],
+    "seeds_right": 2
+   },
+   {
+    "filename": "3-149042-A-24.wav",
+    "fold": 3,
+    "freesound_id": 149042,
+    "calls_seed_0_1_2": [
+     "sneezing",
+     "sneezing",
+     "sneezing"
+    ],
+    "seeds_right": 0
+   },
+   {
+    "filename": "4-154443-A-24.wav",
+    "fold": 4,
+    "freesound_id": 154443,
+    "calls_seed_0_1_2": [
+     "coughing",
+     "coughing",
+     "sneezing"
+    ],
+    "seeds_right": 2
+   },
+   {
+    "filename": "4-157296-A-24.wav",
+    "fold": 4,
+    "freesound_id": 157296,
+    "calls_seed_0_1_2": [
+     "laughing",
+     "laughing",
+     "laughing"
+    ],
+    "seeds_right": 0
+   },
+   {
+    "filename": "4-171396-A-24.wav",
+    "fold": 4,
+    "freesound_id": 171396,
+    "calls_seed_0_1_2": [
+     "laughing",
+     "coughing",
+     "coughing"
+    ],
+    "seeds_right": 2
+   }
+  ]
+ },
+ "called_cough_but_not": {
+  "predictions_of_1080": {
+   "footsteps": 5,
+   "laughing": 8,
+   "drinking_sipping": 4,
+   "sneezing": 5,
+   "brushing_teeth": 1
+  },
+  "total": 23,
+  "distinct_clips": {
+   "footsteps": 2,
+   "laughing": 3,
+   "drinking_sipping": 2,
+   "sneezing": 3,
+   "brushing_teeth": 1
+  }
+ },
+ "cough_vs_rest_per_seed": {
+  "0": {
+   "pooled_auc": 0.983125,
+   "caught_at_false_alarms": {
+    "0": 12,
+    "3": 29,
+    "18": 36
+   },
+   "false_alarms_to_catch": {
+    "36": {
+     "false_alarms_of_360": 16,
+     "share_of_alarms_that_are_coughs": 0.6923076923076923,
+     "by_class": {
+      "laughing": 5,
+      "sneezing": 5,
+      "footsteps": 2,
+      "drinking_sipping": 2,
+      "clapping": 1,
+      "brushing_teeth": 1
+     }
+    },
+    "38": {
+     "false_alarms_of_360": 41,
+     "share_of_alarms_that_are_coughs": 0.4810126582278481,
+     "by_class": {
+      "sneezing": 14,
+      "laughing": 12,
+      "drinking_sipping": 4,
+      "footsteps": 3,
+      "breathing": 3,
+      "clapping": 3,
+      "crying_baby": 1,
+      "brushing_teeth": 1
+     }
+    },
+    "40": {
+     "false_alarms_of_360": 41,
+     "share_of_alarms_that_are_coughs": 0.49382716049382713,
+     "by_class": {
+      "sneezing": 14,
+      "laughing": 12,
+      "drinking_sipping": 4,
+      "footsteps": 3,
+      "breathing": 3,
+      "clapping": 3,
+      "crying_baby": 1,
+      "brushing_teeth": 1
+     }
+    }
+   }
+  },
+  "1": {
+   "pooled_auc": 0.9794444444444445,
+   "caught_at_false_alarms": {
+    "0": 17,
+    "3": 28,
+    "18": 33
+   },
+   "false_alarms_to_catch": {
+    "36": {
+     "false_alarms_of_360": 26,
+     "share_of_alarms_that_are_coughs": 0.5806451612903226,
+     "by_class": {
+      "laughing": 9,
+      "sneezing": 6,
+      "drinking_sipping": 4,
+      "breathing": 3,
+      "footsteps": 2,
+      "clapping": 1,
+      "brushing_teeth": 1
+     }
+    },
+    "38": {
+     "false_alarms_of_360": 31,
+     "share_of_alarms_that_are_coughs": 0.5507246376811594,
+     "by_class": {
+      "laughing": 9,
+      "sneezing": 7,
+      "drinking_sipping": 6,
+      "breathing": 3,
+      "clapping": 3,
+      "footsteps": 2,
+      "brushing_teeth": 1
+     }
+    },
+    "40": {
+     "false_alarms_of_360": 57,
+     "share_of_alarms_that_are_coughs": 0.41237113402061853,
+     "by_class": {
+      "sneezing": 19,
+      "laughing": 12,
+      "drinking_sipping": 11,
+      "breathing": 4,
+      "clapping": 4,
+      "footsteps": 3,
+      "brushing_teeth": 3,
+      "crying_baby": 1
+     }
+    }
+   }
+  },
+  "2": {
+   "pooled_auc": 0.9779166666666667,
+   "caught_at_false_alarms": {
+    "0": 5,
+    "3": 30,
+    "18": 35
+   },
+   "false_alarms_to_catch": {
+    "36": {
+     "false_alarms_of_360": 20,
+     "share_of_alarms_that_are_coughs": 0.6428571428571429,
+     "by_class": {
+      "sneezing": 8,
+      "laughing": 5,
+      "footsteps": 2,
+      "clapping": 2,
+      "breathing": 1,
+      "drinking_sipping": 1,
+      "brushing_teeth": 1
+     }
+    },
+    "38": {
+     "false_alarms_of_360": 48,
+     "share_of_alarms_that_are_coughs": 0.4418604651162791,
+     "by_class": {
+      "sneezing": 14,
+      "drinking_sipping": 12,
+      "laughing": 10,
+      "breathing": 6,
+      "clapping": 3,
+      "footsteps": 2,
+      "brushing_teeth": 1
+     }
+    },
+    "40": {
+     "false_alarms_of_360": 86,
+     "share_of_alarms_that_are_coughs": 0.31746031746031744,
+     "by_class": {
+      "sneezing": 28,
+      "drinking_sipping": 18,
+      "laughing": 15,
+      "breathing": 11,
+      "clapping": 6,
+      "footsteps": 3,
+      "crying_baby": 3,
+      "brushing_teeth": 2
+     }
+    }
+   }
+  }
+ },
+ "false_alarms_at_38_of_40_summed_over_seeds": {
+  "sneezing": 35,
+  "laughing": 31,
+  "drinking_sipping": 22,
+  "breathing": 12,
+  "clapping": 9,
+  "footsteps": 7,
+  "brushing_teeth": 3,
+  "crying_baby": 1
+ },
+ "seeds": {
+  "right_of_400_per_seed": [
+   343,
+   331,
+   331
+  ],
+  "pooled_accuracy_mean": 0.8375,
+  "pooled_accuracy_sd": 0.017320508075688787,
+  "ensemble_right_of_400": 345,
+  "same_call_in_all_three_seeds": 344,
+  "never_right_of_400": 43,
+  "always_right_of_400": 309
+ }
+}

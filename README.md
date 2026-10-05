@@ -58,7 +58,8 @@ the same family of problems on public datasets, reproducible from a clean clone.
 | **Stage 2** | Dry cough or wet cough? | COUGHVID, 2,063 physician-labelled recordings | AUC **0.705 ± 0.027**, balanced accuracy **0.655 ± 0.023** |
 
 The gap between the two stages is the point of the repository. Detecting that a cough
-happened is close to solved on clean audio. Saying what *kind* of cough it was is a
+happened is close to solved on clean audio -- as a ranking; what it costs at a
+threshold is counted in the next section. Saying what *kind* of cough it was is a
 different problem, and the measured number for it is much lower. It is lower than most
 published cough-typing results, and lower than the physicians agree with each other.
 
@@ -93,17 +94,101 @@ difference from chance.
 
 ![Confusion matrix](figures/02_confusion.png)
 
-**Cough is the second-hardest class in the set.** It is recalled 75% of the time, and
-the errors are not spread evenly. 15% of coughs are called **laughing**, twice as many
-as are called sneezing (7%). The confusion is symmetric: 7% of laughs come back as
-coughs. That is not the error you would predict. Sneezing looks like the obvious
-confounder, and it is not. Laughing is a train of short glottal bursts at roughly cough
-spacing. Once the mel filterbank has dropped the fine harmonic detail, the two are
-close neighbours.
+**Cough is one of the three hardest classes in the set.** It is recalled 75% of the
+time, and the errors are not spread evenly. 15% of coughs are called **laughing**, twice
+as many as are called sneezing (7%), and 7% of laughs come back as coughs. That is not
+the error you would predict: sneezing looks like the obvious confounder. Laughing is a
+train of short glottal bursts at roughly cough spacing. Once the mel filterbank has
+dropped the fine harmonic detail, the two are close neighbours. How many clips that
+reading rests on is counted below.
 
-Only `drinking_sipping` does worse (63%, mostly lost to footsteps). At the other end
-`snoring` (97%) and `crying_baby` (95%) are nearly free. They are long, periodic and
-low-frequency, with nothing else in the set resembling them.
+`drinking_sipping` does worse (63%, lost to footsteps more often than to anything else)
+and so does `breathing` (73%). At the other end `snoring` (97%) and `crying_baby` (95%)
+are nearly free. They are long, periodic and low-frequency, with nothing else in the set
+resembling them.
+
+### Is that 120 predictions or 40 clips?
+
+Every percentage above is a share of 120 predictions: the 40 clips of a class, scored
+by three seeds. The seeds are three trainings of one network on the same clips, so they
+are not three samples of coughs. `results/stage1_clip_checks.json` reads the same
+fifteen runs again with the clip as the unit, and with ESC-50's own metadata for the
+recording each clip was cut from (script in the private repository,
+`src/stage1_clip_checks.py`; it needs neither audio nor training). Added on
+5 October 2026.
+
+**The cough errors are clips, not noise.** Each seed gets exactly 30 of the 40 cough
+clips right (95 % interval for 30 of 40: 60–86 %). The 30 wrong predictions fall on 15
+clips, and **7 clips are missed by all three seeds** -- 21 of the 30 errors. 25 clips
+are right every time. A different seed does not move those seven. Over all ten classes
+the three seeds give the same answer on 344 of the 400 clips, and 43 clips are never
+classified correctly.
+
+**"Second-hardest" was wrong.** The first version of this page said that only
+`drinking_sipping` does worse than cough. The pooled confusion matrix above already
+said otherwise:
+
+| Class | Right, of 120 predictions | Right by majority of seeds, of 40 clips | Never right |
+|---|---|---|---|
+| drinking_sipping | 76 (63 %) | 26 | 9 |
+| breathing | 88 (73 %) | 29 | 8 |
+| **coughing** | **90 (75 %)** | **32** | **7** |
+| laughing | 93 (78 %) | 31 | 5 |
+| footsteps | 102 (85 %) | 34 | 5 |
+
+Cough is third from the bottom by predictions and fourth by clips. Breathing, coughing
+and laughing sit within three clips of each other (the interval on 32 of 40 is
+65–90 %), and forty clips cannot rank them.
+
+**Laughing rather than sneezing: six clips against two.** "15% against 7%" is 18
+predictions against 8. By clip, of the seven coughs no seed recognises, five are called
+laughing every time and two sneezing every time; by majority of seeds it is six against
+two. If the two confusions were equally likely, a gap that large would turn up 45 %
+(five against two) or 29 % (six against two) of the time. Three of the five
+always-laughing clips also carry near-consecutive Freesound numbers
+(87794, 87795, 87799). The dataset lists them as three recordings, but numbers that
+close usually mean one upload session, and if so the count is three recordings against
+two. The other direction is level: the laughs called cough are 8 predictions on
+**3 clips**, and sneezes called cough are 5 predictions on 3 clips. So "laughing, not
+sneezing, is the confounder" is what these forty clips suggest. They do not establish
+it. The file names of all 15 clips are in the results file for anyone who wants to
+listen.
+
+**At a threshold, "close to solved" has a price.** Each seed's held-out cough
+probabilities, pooled over the 400 clips, give AUC 0.983, 0.979, 0.978 -- a little
+under the 0.986 mean of the per-fold values, because five separately trained models
+now share one threshold.
+
+| Operating point | seed 0 | seed 1 | seed 2 |
+|---|---|---|---|
+| Coughs caught (of 40) before the first false alarm | 12 | 17 | 5 |
+| Coughs caught with 3 false alarms in the 360 other clips (0.8 %) | 29 | 28 | 30 |
+| Coughs caught with 18 false alarms (5 %) | 36 | 33 | 35 |
+| False alarms needed to catch 36 of 40 | 16 | 26 | 20 |
+| False alarms needed to catch 38 of 40 | 41 | 31 | 48 |
+| False alarms needed to catch all 40 | 41 | 57 | 86 |
+
+Held under one per cent false alarms, the detector finds 28 to 30 coughs of 40. To find
+38 it fires on 31 to 48 of the other 360 clips (9–13 %), so even with one cough for
+every nine other sounds only **44–55 % of the alarms are coughs**. At that setting the
+false alarms come from sneezing first: 35 of the 120 over the three seeds, laughing 31,
+drinking 22. Sneezing is the lesser confusion when the network has to name the class,
+and the leading one when it only has to say "cough" generously. One clip is 2.5 points
+of recall here, so the table is given as counts.
+
+**Seeds move the number less than folds, as in stage 2.** Scored over all 400 clips the
+three seeds get 343, 331 and 331 right: 0.838 ± 0.017 across seeds, against ± 0.041
+across the fifteen runs. Averaging the three seeds' probabilities gets 345 -- two clips
+more than the best single seed.
+
+**What this does not show.** The 400 clips come from 326 source recordings, and
+unevenly: the 40 coughs from 39, the 40 sneezes from 40, but the 40 `crying_baby` clips
+from 18, one of which supplies seven. ESC-50's folds keep a source on one side of the
+split, so nothing leaks, but "95% on `crying_baby`" is a statement about 18 recordings.
+The Freesound-number argument is an inference from the metadata, not a check of who
+uploaded what. And this is still one architecture on curated clips: the seven coughs it
+never recognises are worth hearing before anything is concluded about coughs in
+general.
 
 ---
 
@@ -177,8 +262,11 @@ The run-level results are in `results/`: `cv_runs.json` for stage 1 with per-cli
 logits, `coughtype_runs.json` for stage 2 with per-recording probabilities.
 `tests/test_readme_numbers.py` recomputes every figure quoted on this page from those
 files -- the ± values, the 75 % cough recall, the 15 % laughing confusion, the
-2,063 / 1,587 / 476 split, the operating points above. A regenerated results file
-that no longer matches the text fails the test. `python -m pytest tests/`.
+2,063 / 1,587 / 476 split, the operating points above. `tests/test_stage1_clips.py`
+does the same for the clip-level reading of stage 1, from the stored logits; only the
+source-recording counts are taken from `results/stage1_clip_checks.json`, because
+ESC-50's metadata is not redistributed here. A regenerated results file that no longer
+matches the text fails the test. `python -m pytest tests/`.
 
 ---
 
@@ -186,7 +274,7 @@ that no longer matches the text fails the test. `python -m pytest tests/`.
 
 Read these before quoting any number above.
 
-- **Stage 1 is 400 clips.** Forty per class, 320 in training per fold. Small enough that
+- **Stage 1 is 400 clips from 326 recordings.** Forty per class, 320 in training per fold. Small enough that
   the model memorises the training set in a few epochs without augmentation, and small
   enough that a 3-point difference between methods is noise.
 - **ESC-50 is not clinical data.** Curated Freesound audio: one cough per clip, clean
@@ -223,11 +311,13 @@ read with soundfile, and COUGHVID's webm files go through ffmpeg first. Because
 people do not cough in the first second of a phone recording, the loader
 takes the five-second window with the highest smoothed energy.
 
-On Apple silicon stage 1 takes about 41 s per fold, ten minutes in all; stage 2 about
+On a laptop GPU stage 1 takes about 41 s per fold, ten minutes in all; stage 2 about
 200 s per fold, around 45 minutes. Both training
 scripts write one JSON per (seed, fold) and skip finished pairs on restart.
 The operating-point reading and the test file that pins every number were added on
 17 September 2026, after the first version of this page had gone up without them.
+The clip-by-clip reading of stage 1 followed on 5 October 2026 and withdrew one claim:
+cough is not the second-hardest class.
 
 ---
 
@@ -240,7 +330,7 @@ is the other reason the mel filterbank is written out by hand.
 - [**making-pinns-work**](https://github.com/drdmitrymikhaylov/making-pinns-work) -- the
   same way of reporting applied to physics-informed neural networks: why they fail to
   converge, measured over seeds rather than asserted.
-- [**oreforge**](https://github.com/drdmitrymikhaylov/oreforge) -- a PINN solver inside
+- [**navierpinn-mineral-ore-body-reconstruction**](https://github.com/drdmitrymikhaylov/navierpinn-mineral-ore-body-reconstruction) -- a PINN solver inside
   a 3D ore-body modelling application.
 
 ## Which data and licences apply?
