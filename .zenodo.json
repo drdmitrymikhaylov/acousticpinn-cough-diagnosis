@@ -1,0 +1,21 @@
+{
+  "upload_type": "software",
+  "title": "AcousticPINN: Cough Detection and Dry/Wet Typing",
+  "description": "Cough detection and dry/wet typing on open clinical data",
+  "creators": [
+    {
+      "name": "Mikhaylov, Dmitry",
+      "orcid": "0009-0009-2108-6820",
+      "affiliation": "Abu Dhabi Maritime Academy, AD Ports Group"
+    }
+  ],
+  "license": "cc-by-4.0",
+  "keywords": [
+    "acoustic monitoring",
+    "audio classification",
+    "cough detection",
+    "digital health",
+    "spectrogram"
+  ],
+  "access_right": "open"
+}
