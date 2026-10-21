@@ -1,5 +1,7 @@
 # Cough spectrograms
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23529532.svg)](https://doi.org/10.5281/zenodo.23529532)
+
 **Two stages of acoustic cough analysis, measured on open data with the dataset's own
 folds: is this a cough, and what kind of cough is it.**
 
