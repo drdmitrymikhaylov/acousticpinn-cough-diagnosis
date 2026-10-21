@@ -2,6 +2,7 @@ cff-version: 1.2.0
 message: "If you use this repository, please cite it as below."
 type: software
 title: "AcousticPINN: Cough Detection and Dry/Wet Typing"
+doi: "10.5281/zenodo.23529532"
 abstract: "Cough detection and dry/wet typing on open clinical data"
 authors:
   - family-names: Mikhaylov
