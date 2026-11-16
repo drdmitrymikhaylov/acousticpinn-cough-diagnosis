@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-11-16
+
+- **What the 77 % allows** (new README subsection,
+  `results/label_ceiling_check.json`, `tests/test_label_ceiling.py`, 6 tests).
+  The physicians' 77.0 % agreement and the 476/2 063 labelled-wet share pin a
+  one-parameter family of label-error models; along it a model that
+  reproduced the truth exactly would score AUC 0.71–0.85 against one-rater
+  labels (0.739 under symmetric 13 % errors), so the CNN's 0.701 is 57–97 % of
+  the way from chance to the ceiling (84 % symmetric). The perfect model's
+  sensitivity against the labels is 0.50 under symmetric errors.
+- **Corrected:** the 0.770 in the results table is raw agreement, not
+  balanced accuracy (two always-mostly-dry raters agree 65 % by prevalence).
+  On the kappa scale the physicians sit at 0.35 (pairs 0.07–0.80; the three
+  pairs with physician 3 at 0.07–0.11), the CNN against the labels at 0.22
+  (argmax) and 0.25 (best threshold), a perfect model at 0.52–0.59.
+- **Qualified:** the stage-2 ± are retraining spreads. Recording-level
+  bootstrap: AUC 0.706 [0.681, 0.730]; sensitivity at 90/80/70 %
+  specificity [0.22, 0.32] / [0.41, 0.50] / [0.53, 0.64] where the page's
+  seed spread reads ± 0.03 / 0.00 / 0.00. The fold spread (sd 0.027) equals
+  the sd of random 413-recording subsamples (0.027): no fold is harder than
+  another.
+- Limitations bullet on single-rater labels now carries the kappa reading.
+
 ## 2026-10-19
 
 - LICENSE now holds the standard CC BY 4.0 legal text, so GitHub recognises the licence (it showed "Other" before). The terms are unchanged; the note on what each licence covers moved to `NOTICE.md`.

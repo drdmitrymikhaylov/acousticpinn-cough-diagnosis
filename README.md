@@ -214,13 +214,16 @@ the dataset's own cough detector above 0.8. The split is **1,587 dry / 476 wet**
 | **mel-CNN** | **0.705 ± 0.027** | **0.655 ± 0.023** |
 | Linear baseline (time-averaged log-mel) | 0.559 ± 0.025 | 0.540 ± 0.023 |
 | Always answer "dry" | 0.500 | 0.500 |
-| *Physician vs physician, where they overlapped (n = 565)* | *--* | *0.770* |
+| *Physician vs physician, where they overlapped (n = 565) — raw agreement, not balanced accuracy; see "What the 77 % allows"* | *--* | *0.770 (κ 0.35)* |
 
 **The ceiling is the labels, not the model.** The four physicians overlapped on only 565
 judgements. Where they overlapped they agreed **77.0%** of the time, ranging from 67%
 to 93% depending on the pair. A model cannot cleanly exceed the consistency of the
 thing it is fitted to. That number belongs on the chart, and it is why the result here
-is reported as ROC-AUC and balanced accuracy rather than accuracy.
+is reported as ROC-AUC and balanced accuracy rather than accuracy. How high the
+ceiling is, in numbers, is worked out below in "What the 77 % allows": a model that
+reproduced the truth exactly would score AUC 0.71 to 0.85 against these labels, and
+the CNN's 0.701 is 57 to 97 % of the way there (added 16 November 2026).
 
 **Accuracy would be a lie here.** Always answering "dry" scores 0.769 without listening
 to anything, which is roughly the physicians' own agreement rate. Any paper reporting
@@ -242,6 +245,8 @@ not a lucky split. It is small, but it is everywhere.
 out-of-fold probabilities over all 2,063 recordings gives AUC 0.706, 0.700, 0.698.
 That is **0.701 ± 0.004** across seeds, against ± 0.027 across the fifteen runs.
 Retraining changes the number less than which 413 recordings you happen to score.
+(And that fold spread is what sampling 413 recordings predicts, 0.027 against 0.027
+— no fold is harder than another; see "What the 77 % allows", added 16 November 2026.)
 
 **At the class-weighted argmax threshold the model over-calls "wet".** Pooled over
 the 15 runs it flags **50 %** of recordings as wet when 23 % are: wet recall 0.74,
@@ -257,6 +262,107 @@ Look at the table before imagining a product. If the false-alarm rate on dry cou
 has to stay at 10 %, the model finds one wet cough in four. It only becomes useful as
 a *screen* -- high recall, low precision -- which is the opposite of what a
 cough-typing claim usually implies.
+
+### What the 77 % allows
+
+Three sentences above carry no number: "the ceiling is the labels", the 0.770 in
+the results table, and the ± on the stage-2 figures. All three were read on
+16 November 2026 from the stored runs
+(`results/label_ceiling_check.json`; script `src/label_ceiling_check.py` in the
+private repository). The script first reproduces the pooled AUCs, the operating
+points and the pooled counts above to every digit.
+
+**How high the ceiling is.** Almost every label is one physician's call, and two
+physicians agree 77.0 % of the time. Write that as two raters who mislabel a dry
+cough as wet with probability a and a wet one as dry with probability b, over a
+true wet prevalence w: the agreement and the labelled-wet share (476 of 2 063)
+are two equations in three unknowns, so they pin a one-parameter family, from
+"physicians never call a dry cough wet" (a = 0, b = 0.50, w = 0.46) to
+"physicians never call a wet cough dry" (a = 0.15, b = 0, w = 0.10). Along it, a
+model that reproduced the truth *exactly* — the best any model can do — is
+scored against one-rater labels and gets **AUC 0.71 to 0.85** (0.739 under
+symmetric errors, a = b = 0.13, where the true prevalence is 13 %). The CNN's
+0.701 is **57 % to 97 % of the way from chance to the ceiling** (84 % under
+symmetric errors). The perfect model's sensitivity against the labels is the
+striking column: under symmetric errors it is 0.50 — half of the recordings
+labelled wet are, on this model of the labels, dry coughs a physician called
+wet, so a perfect model "misses" a wet cough half the time. Its balanced
+accuracy ceiling is 0.71 to 0.85 against the CNN's 0.655.
+
+| dry called wet, a | wet called dry, b | true wet share, w | perfect model: AUC | sensitivity | specificity | balanced accuracy | kappa | CNN's share of the ceiling |
+|---|---|---|---|---|---|---|---|---|
+| 0.00 | 0.50 | 0.46 | 0.851 | 1.000 | 0.702 | 0.851 | 0.52 | 57 % |
+| 0.02 | 0.47 | 0.42 | 0.847 | 0.949 | 0.744 | 0.847 | 0.54 | 58 % |
+| 0.05 | 0.42 | 0.34 | 0.834 | 0.858 | 0.811 | 0.834 | 0.57 | 60 % |
+| 0.08 | 0.35 | 0.27 | 0.811 | 0.746 | 0.877 | 0.811 | 0.59 | 65 % |
+| 0.10 | 0.29 | 0.21 | 0.789 | 0.660 | 0.919 | 0.789 | 0.59 | 70 % |
+| 0.13 (symmetric) | 0.13 | 0.13 | 0.739 | 0.502 | 0.977 | 0.739 | 0.56 | 84 % |
+| 0.14 | 0.08 | 0.12 | 0.726 | 0.464 | 0.988 | 0.726 | 0.55 | 89 % |
+| 0.15 | 0.00 | 0.10 | 0.707 | 0.414 | 1.000 | 0.707 | 0.52 | 97 % |
+
+The CNN's share is (0.701 − 0.5) / (ceiling − 0.5). At the right-hand end of the
+family the ceiling is 0.707 and the model is at it.
+
+**The 0.770 is raw agreement, not balanced accuracy.** It sits in the balanced-
+accuracy column of the results table above because that is the only column it
+could go in, but two raters who both call 77 % of coughs dry agree 65 % of the
+time by prevalence alone. Cohen's kappa takes that out. At the labelled subset's
+marginals (23 % wet for both raters — the overlap's own marginals are not in the
+stored file) the physicians sit at **0.35 on the kappa scale**, and the four do
+not agree alike: the three pairs that involve physician 3 are at **0.07 to 0.11**,
+a whisker above chance, the other three at **0.50 to 0.80**. The CNN against the
+label scores **0.22 at the argmax threshold and 0.25 at its best threshold**; a
+model reproducing the truth exactly would score **0.52 to 0.59** against
+one-rater labels. So on one scale: physicians with each other 0.35 (0.07–0.80 by
+pair), the CNN with the labels 0.25 at best, a perfect model with the labels
+0.52–0.59.
+
+| who against whom | judgements | raw agreement | kappa |
+|---|---|---|---|
+| physician 1 vs physician 2 | 83 | 0.855 | 0.59 |
+| physician 1 vs physician 3 | 79 | 0.671 | 0.07 |
+| physician 1 vs physician 4 | 85 | 0.929 | 0.80 |
+| physician 2 vs physician 3 | 101 | 0.673 | 0.08 |
+| physician 2 vs physician 4 | 112 | 0.821 | 0.50 |
+| physician 3 vs physician 4 | 105 | 0.686 | 0.11 |
+| all four, pooled | 565 | 0.770 | 0.35 |
+| CNN against the label, class-weighted argmax (flags 50 %) | 2 063 per seed | 0.609 | 0.22 |
+| CNN against the label, best threshold (flags 30 %) | 2 063 per seed | -- | 0.25 |
+| a model reproducing the truth exactly, against one-rater labels | -- | 0.771 to 0.867 | 0.52 to 0.59 |
+
+**The ± on this page are retraining spreads, not uncertainties.** 0.701 ± 0.004
+is three seeds; the sampling sd over the 2 063 recordings is 0.013, three times
+that. Resampling recordings (2 000 bootstrap draws; seed 0 shown, seeds 1 and 2
+are in the JSON):
+
+| quantity | seed 0 | 95 % interval over recordings | spread over 3 seeds (sd) |
+|---|---|---|---|
+| pooled out-of-fold ROC-AUC | 0.706 | [0.681, 0.730] | 0.004 |
+| wet coughs caught at 90 % specificity | 0.26 | [0.22, 0.32] | 0.03 |
+| wet coughs caught at 80 % specificity | 0.46 | [0.41, 0.50] | 0.00 |
+| wet coughs caught at 70 % specificity | 0.60 | [0.53, 0.64] | 0.00 |
+| balanced accuracy at the argmax threshold | 0.657 | [0.634, 0.679] | 0.002 |
+| kappa at the argmax threshold | 0.22 | [0.19, 0.26] | 0.00 |
+
+The "± 0.00" at 80 % and 70 % specificity in the table above is therefore not
+precision: those sensitivities sit in [0.41, 0.50] and [0.53, 0.64].
+
+**And the fold spread is sampling.** "Most of the run-to-run spread is the fold,
+not the seed" is true and says less than it sounds: the sd of the fifteen run
+AUCs is 0.027, and drawing 413 recordings at random from one seed's pooled
+scores gives an AUC sd of **0.027 against 0.027** — the same number. Every fold
+mean (0.683 to 0.734) lies inside the random-subsample interval [0.652, 0.757].
+No fold is harder than another; a 413-recording test set is that noisy.
+
+**What this does not show.** The label model assumes two physicians err
+independently with the same error rates, that the 565 overlapping judgements
+are representative of the 2 063 labels, and that "the truth" is a binary dry/wet
+a physician could in principle get right; the kappa for the physicians uses the
+labelled subset's marginals because the overlap's own are not stored, and 83 to
+112 judgements per pair make each pair's figure rough. The bootstrap resamples
+recordings, not speakers (the dataset cannot group them). Nothing here changes a
+model or a number already on the page; it says what the numbers can and cannot
+mean.
 
 ### How are the numbers checked?
 
@@ -288,7 +394,9 @@ Read these before quoting any number above.
   dataset, not of coughs.
 - **COUGHVID labels are single-rater for most clips.** Only 107 recordings were judged
   by two or more physicians. Almost every training label is one doctor's opinion, and
-  the measured 77% pairwise agreement says how much that opinion moves between doctors.
+  the measured 77% pairwise agreement says how much that opinion moves between doctors
+  — on the kappa scale 0.35, and the three pairs involving one of the four physicians
+  sit at 0.07 to 0.11, barely above chance (see "What the 77 % allows").
 - **COUGHVID is crowdsourced audio.** Phone microphones, uncontrolled rooms, no
   diagnosis confirmed by test for most uploads, and no way to group recordings by
   speaker. If one person uploaded several clips they can land on both sides of a
